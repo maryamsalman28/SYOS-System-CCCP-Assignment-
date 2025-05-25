@@ -1,0 +1,18 @@
+<component name="libraryTable">
+  <library name="libs4">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/out/production/CCCPSYOS/bin/libs/mockito-core-5.11.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/out/production/CCCPSYOS/bin/libs/mssql-jdbc-12.8.1.jre8.jar!/" />
+      <root url="jar://$PROJECT_DIR$/out/production/CCCPSYOS/bin/libs/byte-buddy-agent-1.14.14.jar!/" />
+      <root url="jar://$PROJECT_DIR$/out/production/CCCPSYOS/bin/libs/junit-jupiter-api-5.11.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/out/production/CCCPSYOS/bin/libs/junit-platform-console-standalone-1.8.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/out/production/CCCPSYOS/bin/libs/byte-buddy-1.14.14.jar!/" />
+      <root url="jar://$PROJECT_DIR$/out/production/CCCPSYOS/bin/libs/mockito-junit-jupiter-5.11.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/out/production/CCCPSYOS/bin/libs/junit-platform-engine-1.11.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/out/production/CCCPSYOS/bin/libs/junit-jupiter-engine-5.11.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/out/production/CCCPSYOS/bin/libs/junit-platform-commons-1.11.0.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

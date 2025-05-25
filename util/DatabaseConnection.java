@@ -8,10 +8,17 @@ public class DatabaseConnection {
     private static DatabaseConnection instance;
     private Connection connection;
 
-    private static final String DB_URL = "jdbc:sqlserver://DESKTOP-CIJ18KU:1433;databaseName=CCCPSYOS;integratedSecurity=true;encrypt=true;trustServerCertificate=true";
+    // ✅ SQL Authentication — no DLL needed
+    private static final String DB_URL =
+            "jdbc:sqlserver://localhost:1433;" +
+                    "databaseName=CCCPSYOS;" +
+                    "user=sa;" +  // 👈 change this
+                    "password=sa123;" +  // 👈 change this
+                    "encrypt=true;" +
+                    "trustServerCertificate=true;";
 
     private DatabaseConnection() throws SQLException {
-        reconnect(); // Ensure connection is always established
+        reconnect();
     }
 
     public static DatabaseConnection getInstance() throws SQLException {
@@ -24,17 +31,32 @@ public class DatabaseConnection {
     public Connection getConnection() {
         try {
             if (connection == null || connection.isClosed()) {
-                System.out.println("Re-establishing database connection...");
+                System.out.println("🔁 Re-establishing database connection...");
                 reconnect();
             }
         } catch (SQLException e) {
+            System.err.println("❌ Failed to re-establish connection: " + e.getMessage());
             e.printStackTrace();
         }
         return connection;
     }
 
     private void reconnect() throws SQLException {
-        connection = DriverManager.getConnection(DB_URL);
-        System.out.println("Database connection established successfully.");
+        try {
+            Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+            System.out.println("✅ JDBC driver loaded.");
+        } catch (ClassNotFoundException e) {
+            System.err.println("❌ JDBC driver not found.");
+            e.printStackTrace();
+            return;
+        }
+
+        try {
+            connection = DriverManager.getConnection(DB_URL);
+            System.out.println("✅ Database connection successful.");
+        } catch (SQLException e) {
+            System.err.println("❌ Database connection failed: " + e.getMessage());
+            throw e;
+        }
     }
 }

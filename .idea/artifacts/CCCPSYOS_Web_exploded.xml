@@ -1,0 +1,17 @@
+<component name="ArtifactManager">
+  <artifact type="exploded-war" name="CCCPSYOS:Web exploded">
+    <output-path>$PROJECT_DIR$/out/artifacts/CCCPSYOS_Web_exploded</output-path>
+    <root id="root">
+      <element id="javaee-facet-resources" facet="CCCPSYOS/web/Web" />
+      <element id="directory" name="WEB-INF">
+        <element id="directory" name="classes">
+          <element id="module-output" name="CCCPSYOS" />
+        </element>
+        <element id="directory" name="lib">
+          <element id="file-copy" path="$PROJECT_DIR$/libs/mssql-jdbc-12.8.1.jre8.jar" />
+        </element>
+      </element>
+      <element id="module-output" name="CCCPSYOS" />
+    </root>
+  </artifact>
+</component>

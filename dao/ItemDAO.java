@@ -12,56 +12,69 @@ public class ItemDAO {
 
      // add a new item
      public void addItem(Item item) {
-        String storedProcedure = "{CALL AddItemWithStock(?, ?, ?, ?, ?, ?)}";
-    
-        try (Connection conn = DatabaseConnection.getInstance().getConnection();
-             CallableStatement stmt = conn.prepareCall(storedProcedure)) {
-    
-            stmt.setString(1, item.getItemCode());
-            stmt.setString(2, item.getItemName());
-            stmt.setInt(3, item.getQuantity()); 
-            stmt.setDouble(4, item.getPrice());
-            stmt.setString(5, item.getExpiryDate());
-            stmt.setString(6, LocalDate.now().toString());
-    
-            stmt.execute();
-            System.out.println("Item, stock batch, and shelves updated successfully.");
-            
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-    
-    
-    
-    
+         String storedProcedure = "{CALL AddItemWithStock(?, ?, ?, ?, ?, ?, ?, ?)}";
+
+         try (Connection conn = DatabaseConnection.getInstance().getConnection();
+              CallableStatement stmt = conn.prepareCall(storedProcedure)) {
+
+             stmt.setString(1, item.getItemCode());
+             stmt.setString(2, item.getItemName());
+             stmt.setInt(3, item.getQuantity());
+             stmt.setDouble(4, item.getPrice());
+             stmt.setString(5, item.getDateOfPurchase()); // ✅ Fix: previously skipped
+             stmt.setString(6, item.getExpiryDate());
+             stmt.setString(7, item.getSalesType());      // ✅ Fix: previously image was passed here
+             stmt.setString(8, item.getImageUrl());       // ✅ This goes last
+
+             stmt.execute();
+             System.out.println("Item, stock batch, and shelves updated successfully.");
+
+         } catch (SQLException e) {
+             e.printStackTrace();
+         }
+     }
+
+
+
+
+
 
     // reduce stock after checkout
-public boolean reduceStockAfterCheckout(int itemId, int quantity, Connection conn) {
-    String sql = "{CALL ReduceStockAfterCheckout(?, ?)}";
+// ✅ Main method using stored procedure
+    // reduce stock after checkout
+    public boolean reduceStockAfterCheckout(int itemId, int quantity, Connection conn) {
+        System.out.println("[DEBUG] Sending itemId=" + itemId + ", quantity=" + quantity + " to stored procedure");
 
-    try (CallableStatement stmt = conn.prepareCall(sql)) { 
-        System.out.println("[CALLING STORED PROCEDURE] Item ID: " + itemId + " | Quantity: " + quantity);
+        String sql = "{CALL ReduceStockAfterCheckout(?, ?, ?)}";
+        try (CallableStatement stmt = conn.prepareCall(sql)) {
+            stmt.setInt(1, itemId);
+            stmt.setInt(2, quantity);
+            stmt.registerOutParameter(3, Types.BIT); // Output parameter for success
 
-        stmt.setInt(1, itemId);
-        stmt.setInt(2, quantity);
+            stmt.execute();
 
-        stmt.execute();
+            // Log the raw value returned from stored procedure
+            int rawSuccess = stmt.getInt(3);
+            System.out.println("[SP DEBUG] Output BIT value from SP = " + rawSuccess);
 
-        // check for warnings
-        SQLWarning warning = stmt.getWarnings();
-        if (warning != null) {
-            System.out.println("[STOCK REDUCTION WARNING] " + warning.getMessage());
-            return false; // ensure stock reduction failure
+            boolean success = rawSuccess == 1;
+            if (success) {
+                System.out.println("[✅] Stock reduced via SP for itemId=" + itemId + ", quantity=" + quantity);
+                return true;
+            } else {
+                System.err.println("[❌] Stock not reduced: item not found or insufficient quantity.");
+                return false;
+            }
+        } catch (SQLException e) {
+            System.err.println("[DB ERROR] Stock reduction via SP failed: " + e.getMessage());
+            return false;
         }
-
-        System.out.println("[STOCK SUCCESSFULLY REDUCED] Item ID: " + itemId);
-        return true;
-    } catch (SQLException e) {
-        System.out.println("[STOCK REDUCTION FAILED] Error: " + e.getMessage());
-        return false;
     }
-}
+
+
+
+
+
 
 
 
@@ -340,6 +353,40 @@ public boolean reorderNewBatch(int itemId, int newBatchQuantity, String batchNum
     }
 }
 
+
+    public List<Item> getAvailableItems() {
+        List<Item> items = new ArrayList<>();
+        try (Connection conn = DatabaseConnection.getInstance().getConnection()) {
+            String sql = "SELECT * FROM Items WHERE quantity_in_store > 0";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                Item item = new Item.Builder()
+                        .itemId(rs.getInt("item_id"))
+                        .itemCode(rs.getString("item_code"))
+                        .itemName(rs.getString("item_name"))
+                        .batchNumber(rs.getString("batch_number"))
+                        .quantity(rs.getInt("quantity_in_store"))
+                        .price(rs.getDouble("price"))
+                        .dateOfPurchase(rs.getString("date_of_purchase"))
+                        .expiryDate(rs.getString("expiry_date"))
+                        .salesType(rs.getString("sales_type"))
+                        .imageUrl(
+                                rs.getString("image_url") != null
+                                        ? rs.getString("image_url")
+                                        : "https://via.placeholder.com/100?text=No+Image"
+                        )
+                        .build();
+
+                items.add(item);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return items;
+    }
 
 
 

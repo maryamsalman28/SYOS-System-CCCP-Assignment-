@@ -1,0 +1,18 @@
+<component name="libraryTable">
+  <library name="libs">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/out/production/CCCPSYOS/libs/junit-platform-engine-1.11.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/out/production/CCCPSYOS/libs/mssql-jdbc-12.8.1.jre8.jar!/" />
+      <root url="jar://$PROJECT_DIR$/out/production/CCCPSYOS/libs/junit-platform-console-standalone-1.8.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/out/production/CCCPSYOS/libs/org.jacoco.cli-0.8.12.jar!/" />
+      <root url="jar://$PROJECT_DIR$/out/production/CCCPSYOS/libs/mockito-junit-jupiter-5.11.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/out/production/CCCPSYOS/libs/junit-platform-commons-1.11.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/out/production/CCCPSYOS/libs/mockito-core-5.11.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/out/production/CCCPSYOS/libs/junit-jupiter-engine-5.11.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/out/production/CCCPSYOS/libs/org.jacoco.agent-0.8.12.jar!/" />
+      <root url="jar://$PROJECT_DIR$/out/production/CCCPSYOS/libs/junit-jupiter-api-5.11.0.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

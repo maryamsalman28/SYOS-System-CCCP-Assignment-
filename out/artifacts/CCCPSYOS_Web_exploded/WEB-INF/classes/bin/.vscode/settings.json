@@ -1,0 +1,11 @@
+{
+  "java.project.sourcePaths": ["test", "."],
+  "java.project.referencedLibraries": [
+    "libs/junit-jupiter-api-5.11.0.jar",
+    "libs/junit-jupiter-engine-5.11.0.jar",
+    "libs/junit-platform-commons-1.11.0.jar",
+    "libs/junit-platform-engine-1.11.0.jar",
+    "libs/**/*.jar"
+  ],
+  "java.project.outputPath": "bin"
+}

@@ -21,7 +21,7 @@ import service.FlatDiscountStrategy;
 import service.ItemService;
 import service.MultiStoreService;
 import service.PercentageDiscountStrategy;
-import service.ReportServiceTest;
+import service.ReportService;
 import service.TieredDiscountStrategy;
 import service.UserService;
 import util.DatabaseConnection;
@@ -45,7 +45,7 @@ public class Main {
         MultiStoreService multiStoreService = new MultiStoreService();
         DiscountService discountService = new DiscountService();
         UserService userService = new UserService();
-        ReportServiceTest reportService = new ReportServiceTest();
+        ReportService reportService = new ReportService();
         Scanner scanner = new Scanner(System.in);
         
 
@@ -240,54 +240,58 @@ public class Main {
                                                     System.out.printf("Cash tendered: %.2f\n", cashTendered);
                                                     System.out.printf("Change due: %.2f\n", changeDue);
                                                     break;
-                                                
 
-                                                    case 2: // add item 
-                                                    System.out.print("Enter Item Code: ");
-                                                    String itemCode = scanner.nextLine();
-                                                
-                                                    System.out.print("Enter Item Name: ");
-                                                    String itemName = scanner.nextLine();
-                                                
-                                                    System.out.print("Enter Quantity in Store: ");
-                                                    int quantityInStore = scanner.nextInt();
-                                                    while (quantityInStore <= 0) {
-                                                        System.out.print("Quantity must be positive. Re-enter Quantity: ");
-                                                        quantityInStore = scanner.nextInt();
-                                                    }
-                                                
-                                                    System.out.print("Enter Price: ");
-                                                    double price = scanner.nextDouble();
-                                                    while (price <= 0) {
-                                                        System.out.print("Price must be positive. Re-enter Price: ");
-                                                        price = scanner.nextDouble();
-                                                    }
-                                                    scanner.nextLine(); // Consume newline
-                                                
-                                                    System.out.print("Enter Date of Purchase (YYYY-MM-DD): ");
-                                                    String dateOfPurchase = scanner.nextLine();
-                                                
-                                                    System.out.print("Enter Expiry Date (YYYY-MM-DD): ");
-                                                    String expiryDate = scanner.nextLine();
-                                                
-                                                    System.out.print("Enter Sales Type (e.g., in-store, online): ");
-                                                    String salesType = scanner.nextLine();
-                                                
-                                                    // batch number removed (it will be auto-generated in StockBatches)
-                                                    Item item = new Item.Builder()
-                                                        .itemCode(itemCode)
-                                                        .itemName(itemName)
-                                                        .quantity(quantityInStore)
-                                                        .price(price)
-                                                        .dateOfPurchase(dateOfPurchase)
-                                                        .expiryDate(expiryDate.isEmpty() ? null : expiryDate)
-                                                        .salesType(salesType.isEmpty() ? "in-store" : salesType)
-                                                        .build();
-                                                
-                                                    itemService.addItem(item);
-                                                    break;
-                                                
-                                    
+
+                                                    case 2: // add item
+                                                        System.out.print("Enter Item Code: ");
+                                                        String itemCode = scanner.nextLine();
+
+                                                        System.out.print("Enter Item Name: ");
+                                                        String itemName = scanner.nextLine();
+
+                                                        System.out.print("Enter Quantity in Store: ");
+                                                        int quantityInStore = scanner.nextInt();
+                                                        while (quantityInStore <= 0) {
+                                                            System.out.print("Quantity must be positive. Re-enter Quantity: ");
+                                                            quantityInStore = scanner.nextInt();
+                                                        }
+
+                                                        System.out.print("Enter Price: ");
+                                                        double price = scanner.nextDouble();
+                                                        while (price <= 0) {
+                                                            System.out.print("Price must be positive. Re-enter Price: ");
+                                                            price = scanner.nextDouble();
+                                                        }
+                                                        scanner.nextLine(); // Consume newline
+
+                                                        System.out.print("Enter Date of Purchase (YYYY-MM-DD): ");
+                                                        String dateOfPurchase = scanner.nextLine();
+
+                                                        System.out.print("Enter Expiry Date (YYYY-MM-DD): ");
+                                                        String expiryDate = scanner.nextLine();
+
+                                                        System.out.print("Enter Sales Type (e.g., in-store, online): ");
+                                                        String salesType = scanner.nextLine();
+
+                                                        System.out.print("Enter Image URL (optional): ");
+                                                        String imageUrl = scanner.nextLine();
+
+                                                        Item item = new Item.Builder()
+                                                                .itemCode(itemCode)
+                                                                .itemName(itemName)
+                                                                .quantity(quantityInStore)
+                                                                .price(price)
+                                                                .dateOfPurchase(dateOfPurchase)
+                                                                .expiryDate(expiryDate.isEmpty() ? null : expiryDate)
+                                                                .salesType(salesType.isEmpty() ? "in-store" : salesType)
+                                                                .imageUrl(imageUrl.isEmpty() ? null : imageUrl) // ✅ new line
+                                                                .build();
+
+                                                        itemService.addItem(item);
+                                                        break;
+
+
+
                                                     case 3: // view items
                                                     itemService.displayAllItems();
                                                     break;
@@ -520,7 +524,7 @@ case 12: // Generate Batch-Wise Stock Report
                                     
         case 13: // generate complete bill history report
         System.out.println("\n--- Complete Bill History Report ---");
-        ((ReportServiceTest) reportService).generateBillHistoryReport();
+        ((ReportService) reportService).generateBillHistoryReport();
         break;
 
 case 14: // export inventory report

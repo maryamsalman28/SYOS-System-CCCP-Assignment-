@@ -1,0 +1,18 @@
+<component name="libraryTable">
+  <library name="libs3">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/libs/junit-platform-commons-1.11.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/junit-jupiter-engine-5.11.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/org.jacoco.cli-0.8.12.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/mockito-junit-jupiter-5.11.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/junit-jupiter-api-5.11.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/junit-platform-engine-1.11.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/junit-platform-console-standalone-1.8.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/org.jacoco.agent-0.8.12.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/mockito-core-5.11.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/mssql-jdbc-12.8.1.jre8.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

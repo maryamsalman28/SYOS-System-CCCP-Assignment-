@@ -10,7 +10,18 @@ import observer.Observer;
 import observer.Subject;
 
 public class ItemService implements Subject {
-    private final ItemDAO itemDAO = new ItemDAO();
+    private final ItemDAO itemDAO;
+
+    // ✅ No-argument constructor added
+    public ItemService() {
+        this.itemDAO = new ItemDAO();
+    }
+
+    // ✅ Existing constructor unchanged
+    public ItemService(ItemDAO itemDAO) {
+        this.itemDAO = itemDAO;
+    }
+
     private final List<Observer> observers = new ArrayList<>();
 
     // sdd a new item to the inventory
@@ -43,8 +54,6 @@ public class ItemService implements Subject {
         return itemDAO.getOnlineInventory();
     }
 
-
-
     // delete an item from the inventory
     public void deleteItem(String itemCode) {
         itemDAO.deleteItem(itemCode); // Updated method in ItemDAO
@@ -61,61 +70,63 @@ public class ItemService implements Subject {
         return itemDAO.getLowStockItems(reorderLevel);
     }
 
-// Fetch item by its Code
-
-public Item getItemByCode(String itemCode) {
-    Item item = itemDAO.getItemByCode(itemCode);
-    if (item == null) {
-        System.out.println("Item with Code '" + itemCode + "' not found in the database.");
-    }
-    return item;
-}
-
-//reduce stock after checkout
-public boolean reduceStockAfterCheckout(String itemCode, int quantity, Connection conn) {  
-    Item item = itemDAO.getItemByCode(itemCode);  
-    if (item == null) {
-        System.out.println("No item found with code: " + itemCode);
-        return false;
+    // Fetch item by its Code
+    public Item getItemByCode(String itemCode) {
+        Item item = itemDAO.getItemByCode(itemCode);
+        if (item == null) {
+            System.out.println("Item with Code '" + itemCode + "' not found in the database.");
+        }
+        return item;
     }
 
-    int itemId = item.getItemId(); // Convert itemCode to itemId
-    return itemDAO.reduceStockAfterCheckout(itemId, quantity, conn);
-}
+    // reduce stock after checkout
+    // Existing one — do NOT remove
+    public boolean reduceStockAfterCheckout(String itemCode, int quantity, Connection conn) {
+        Item item = itemDAO.getItemByCode(itemCode);
+        if (item == null) {
+            System.out.println("No item found with code: " + itemCode);
+            return false;
+        }
+
+        int itemId = item.getItemId(); // Convert itemCode to itemId
+        return itemDAO.reduceStockAfterCheckout(itemId, quantity, conn);
+    }
+
+    // ✅ New one — added for direct itemId support
+    public boolean reduceStockAfterCheckout(int itemId, int quantity, Connection conn) {
+        return itemDAO.reduceStockAfterCheckout(itemId, quantity, conn);
+    }
 
 
-
-
-
-
-  
-
-   // Generate batch-wise stock reports
-   public void generateBatchWiseStockReport() {
-    List<Item> allItems = itemDAO.getAllItems();
-    System.out.println("\n --- Batch-Wise Stock Report ---");
-    for (Item item : allItems) {
-        System.out.println("Item: " + item.getItemName());
-        int itemId = item.getItemId(); 
-        List<StockBatch> batches = itemDAO.getBatchesForItem(item.getItemCode());  
-        for (StockBatch batch : batches) {
-            System.out.printf("  Batch ID: %d | Quantity: %d | Expiry Date: %s | Arrival Date: %s\n",
-                    batch.getBatchId(), batch.getQuantity(), batch.getExpiryDate(), batch.getArrivalDate());
+    // Generate batch-wise stock reports
+    public void generateBatchWiseStockReport() {
+        List<Item> allItems = itemDAO.getAllItems();
+        System.out.println("\n --- Batch-Wise Stock Report ---");
+        for (Item item : allItems) {
+            System.out.println("Item: " + item.getItemName());
+            int itemId = item.getItemId();
+            List<StockBatch> batches = itemDAO.getBatchesForItem(item.getItemCode());
+            for (StockBatch batch : batches) {
+                System.out.printf("  Batch ID: %d | Quantity: %d | Expiry Date: %s | Arrival Date: %s\n",
+                        batch.getBatchId(), batch.getQuantity(), batch.getExpiryDate(), batch.getArrivalDate());
+            }
         }
     }
-}
 
-public boolean reorderNewBatch(String itemCode, int newBatchQuantity, String batchNumber, String dateOfPurchase, String expiryDate) {
-    Item item = itemDAO.getItemByCode(itemCode);
-    if (item == null) {
-        System.out.println("Item with code '" + itemCode + "' not found.");
-        return false;
+    public boolean reorderNewBatch(String itemCode, int newBatchQuantity, String batchNumber, String dateOfPurchase, String expiryDate) {
+        Item item = itemDAO.getItemByCode(itemCode);
+        if (item == null) {
+            System.out.println("Item with code '" + itemCode + "' not found.");
+            return false;
+        }
+
+        int itemId = item.getItemId();
+        return itemDAO.reorderNewBatch(itemId, newBatchQuantity, batchNumber, dateOfPurchase, expiryDate);
     }
 
-    int itemId = item.getItemId();
-    return itemDAO.reorderNewBatch(itemId, newBatchQuantity, batchNumber, dateOfPurchase, expiryDate);
-}
-
+    public List<Item> getAvailableItems() {
+        return itemDAO.getAvailableItems();
+    }
 
     // Observer Pattern Implementation
     @Override

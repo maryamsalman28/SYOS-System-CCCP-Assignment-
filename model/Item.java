@@ -1,15 +1,16 @@
 package model;
 
 public class Item {
-    private int itemId; 
-    private String itemCode; 
+    private int itemId;
+    private String itemCode;
     private String itemName;
-    private String batchNumber; 
-    private int quantity; 
+    private String batchNumber;
+    private int quantity;
     private double price;
     private String dateOfPurchase;
-    private String expiryDate; 
-    private String salesType; 
+    private String expiryDate;
+    private String salesType;
+    private String imageUrl; // ✅ NEW FIELD
 
     private Item(Builder builder) {
         this.itemId = builder.itemId;
@@ -21,6 +22,7 @@ public class Item {
         this.dateOfPurchase = builder.dateOfPurchase;
         this.expiryDate = builder.expiryDate;
         this.salesType = builder.salesType;
+        this.imageUrl = builder.imageUrl; // ✅ Assign new field
     }
 
     public int getItemId() {
@@ -43,8 +45,6 @@ public class Item {
         return quantity;
     }
 
-    
-
     public double getPrice() {
         return price;
     }
@@ -61,7 +61,9 @@ public class Item {
         return salesType;
     }
 
-
+    public String getImageUrl() { // ✅ New getter
+        return imageUrl;
+    }
 
     public static class Builder {
         private int itemId;
@@ -73,6 +75,7 @@ public class Item {
         private String dateOfPurchase;
         private String expiryDate;
         private String salesType;
+        private String imageUrl; // ✅ New field
 
         // No-argument constructor
         public Builder() {
@@ -103,8 +106,6 @@ public class Item {
             return this;
         }
 
-       
-
         public Builder price(double price) {
             this.price = price;
             return this;
@@ -122,6 +123,11 @@ public class Item {
 
         public Builder salesType(String salesType) {
             this.salesType = salesType;
+            return this;
+        }
+
+        public Builder imageUrl(String imageUrl) { // ✅ New setter
+            this.imageUrl = imageUrl;
             return this;
         }
 
